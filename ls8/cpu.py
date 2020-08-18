@@ -7,7 +7,9 @@ class CPU:
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.ram = [0] * 256
+        self.reg = [0] * 8
+        self.pc = 0
 
     def load(self):
         """Load a program into memory."""
@@ -60,6 +62,75 @@ class CPU:
 
         print()
 
+    def ram_read(self, location):
+        return self.ram[location]
+
+    def ram_write(self, location, value):
+        self.ram[location] = value
+
     def run(self):
         """Run the CPU."""
-        pass
+        HLT = 0b00000001
+        LDI = 0b10000010
+        PRN = 0b01000111
+        MUL = 0b10100010
+        PUS = 0b01000101
+        POP = 0b01000110
+        ADD = 0b10100000
+        CALL = 0b01010000
+        RET = 0b00010001
+        CMP = 0b10100111
+        JMP = 0b01010100
+        JEQ = 0b01010101
+        JNE = 0b01010110
+
+        running = True
+
+        while running:
+            instruction = self.ram[self.pc]
+
+            operand_a = self.ram[self.pc + 1]
+            operand_b = self.ram[self.pc + 2]
+
+            if instruction is HLT:
+                running = False
+
+            elif instruction is LDI:
+                self.reg[self.ram[self.pc + 1]] = self.ram[self.pc + 2]
+                self.pc += 3
+
+            elif instruction == ADD:
+                pass
+
+            elif instruction == PRN:
+                register_num = self.ram[self.pc + 1]
+                print(self.reg[register_num])
+                self.pc += 2
+
+            elif instruction == MUL:
+                pass
+
+            elif instruction == PUS:
+                pass
+
+            elif instruction == POP:
+                pass
+
+            elif instruction == CALL:
+                pass
+
+            elif instruction == RET:
+                pass
+
+            elif instruction == CMP:
+                pass
+
+            elif instruction == JMP:
+                pass
+
+            elif instruction == JEQ:
+                pass
+
+            elif instruction == JNE:
+                pass
+            
