@@ -16,6 +16,8 @@ JMP = 0b01010100
 JEQ = 0b01010101
 JNE = 0b01010110
 
+SP = 7  # Stack Pointer
+
 class CPU:
     """Main CPU class."""
 
@@ -24,6 +26,7 @@ class CPU:
         self.ram = [0] * 256
         self.reg = [0] * 8
         self.pc = 0
+        self.reg[SP] = 0XF4
 
     def load(self, filename=None):
         """Load a program into memory."""
@@ -107,8 +110,8 @@ class CPU:
         while running:
             instruction = self.ram_read(self.pc)
 
-            operand_a = self.ram_read(self.pc + 1)
-            operand_b = self.ram_read(self.pc + 2)
+            # operand_a = self.ram_read(self.pc + 1)
+            # operand_b = self.ram_read(self.pc + 2)
 
             if instruction is HLT:
                 running = False
@@ -130,10 +133,18 @@ class CPU:
                 self.pc += 3
 
             elif instruction == PUS:
-                pass
+                reg_index = self.ram_read(self.pc + 1)
+                val = self.reg[reg_index]
+                self.reg[SP] -= 1
+                self.ram_write(self.reg[SP], val)
+                self.pc += 2
 
             elif instruction == POP:
-                pass
+                reg_index = self.ram_read(self.pc + 1)
+                val = self.ram[self.reg[SP]]
+                self.reg[SP] += 1
+                self.reg[reg_index] = val
+                self.pc += 2
 
             elif instruction == CALL:
                 pass
